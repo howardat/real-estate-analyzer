@@ -38,7 +38,7 @@ class FirstPage:
     def _concatenate_params_url(
         parser: ParserConfig, city_url: str, param_urls: tuple
     ) -> str:
-        full_url = parser.rent_url + city_url
+        full_url = parser.sell_url + city_url
         search_str = parser.sep.join(i for i in param_urls if i is not None)
         if search_str:
             full_url += parser.q_pref + search_str
@@ -50,7 +50,7 @@ class FirstPage:
         parser = config.parser_config
         city_url = parser.cities_url_map.get(search.city)
         param_urls = (
-            cls._get_param_url(search.has_photo, parser.has_photo_url),
+            cls._get_param_url(search.has_photo, parser.has_photo_url), 
             cls._get_param_url(search.furniture, parser.furniture_url),
             cls._get_rooms_url(search.rooms, parser),
             cls._get_price_url(search.price_from, parser.prices_from_url),

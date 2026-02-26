@@ -55,6 +55,7 @@ class ParserConfig:
     max_rooms: int = 5
     home_url: str = "https://krisha.kz"
     rent_url: str = "https://krisha.kz/arenda/kvartiry/"
+    sell_url: str = "https://krisha.kz/prodazha/kvartiry/"
     sep: str = "&das"
     q_pref: str = "?das"
     equ: str = "="

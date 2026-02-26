@@ -11,25 +11,22 @@ def create_db(connector: DBConnection) -> None:
     query = """
             CREATE TABLE IF NOT EXISTS flats
             (
-                id          INTEGER NOT NULL PRIMARY KEY,
-                uuid        TEXT    NOT NULL UNIQUE,
-                url         TEXT    NOT NULL,
-                room        INTEGER,
-                square      INTEGER,
-                city        TEXT,
-                lat         REAL,
-                lon         REAL,
-                description TEXT,
-                photo       TEXT,
-                star        INTEGER DEFAULT 0,
-                focus       INTEGER DEFAULT 0
+                id     INTEGER NOT NULL PRIMARY KEY,
+                url    TEXT    NOT NULL,
+                room   INTEGER,
+                square INTEGER,
+                city   TEXT,
+                photo  TEXT,
+                specs  TEXT,
+                star   INTEGER DEFAULT 0,
+                focus  INTEGER DEFAULT 0
             );
             CREATE TABLE IF NOT EXISTS prices
             (
-                id       INTEGER PRIMARY KEY NOT NULL,
-                date     DATE DEFAULT (DATE('now', 'localtime')),
-                flat_id  INTEGER             NOT NULL,
-                price    INTEGER             NOT NULL,
+                id      INTEGER PRIMARY KEY NOT NULL,
+                date    DATE DEFAULT (DATE('now', 'localtime')),
+                flat_id INTEGER             NOT NULL,
+                price   INTEGER             NOT NULL,
                 FOREIGN KEY (flat_id) REFERENCES flats (id),
                 UNIQUE (date, flat_id)
             );

@@ -64,19 +64,31 @@ class FlatParser:
         advert = cls._get_advert(pars_data, "advert")
         adverts = cls._get_adverts(pars_data, "adverts")
         address = cls._get_sub_data(adverts, "fullAddress")
-        lat_lon = cls._get_sub_data(advert, "map")
         photos = cls._get_sub_data(advert, "photos")
 
-        return Flat(
-            id=cls._get_sub_data(advert, "id", required=True),
-            uuid=cls._get_sub_data(adverts, "uuid", required=True),
-            url=url,
-            room=cls._get_sub_data(advert, "rooms"),
-            square=cls._get_sub_data(advert, "square"),
-            city=address.split(",")[0] if address else None,
-            lat=cls._get_sub_data(lat_lon, "lat") if lat_lon else None,
-            lon=cls._get_sub_data(lat_lon, "lon") if lat_lon else None,
-            description=cls._get_sub_data(adverts, "description"),
-            photo=cls._get_sub_data(photos[0], "src") if photos else None,
-            price=cls._get_sub_data(advert, "price", required=True),
-        )
+        dt_specs = {
+            dt.get("data-name").split(".")[-1]: dt.find_next_sibling("dd").get_text(strip=True)
+            for dt in content.find_all("dt", attrs={"data-name": True})
+            if dt.find_next_sibling("dd")
+        }
+
+        info_specs = {
+            div.get("data-name").split(".")[-1]: div.find("div", class_="offer__advert-short-info").get_text(strip=True)
+            for div in content.find_all("div", class_="offer__info-item", attrs={"data-name": True})
+            if div.find("div", class_="offer__advert-short-info")
+        }
+
+        specs = {**info_specs, **dt_specs}  # dt_specs wins on key conflicts
+
+        flat_data = {
+            "id": advert.get("id"),
+            "room": advert.get("rooms"),
+            "square": advert.get("square"),
+            "city": address.split(",")[0] if address else None,
+            "photo": photos[0].get("src") if photos else None,
+            "url": url,
+            "price": advert.get("price"),
+            **specs,
+        }
+
+        return Flat(**flat_data)
