@@ -65,7 +65,7 @@ class FlatParser:
         adverts = cls._get_adverts(pars_data, "adverts")
         address = cls._get_sub_data(adverts, "fullAddress")
         photos = cls._get_sub_data(advert, "photos")
-        lat_lon = cls._get_sub_data(advert, "lat_lon")
+        lat_lon = cls._get_sub_data(advert, "map")
 
         dt_specs = {
             dt.get("data-name").split(".")[-1]: dt.find_next_sibling("dd").get_text(strip=True)
